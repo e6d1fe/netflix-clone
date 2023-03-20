@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
+import Header from "../../components/header";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -70,6 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
+        <Header />
         <Component {...pageProps} />
       </ThemeProvider>
     </>

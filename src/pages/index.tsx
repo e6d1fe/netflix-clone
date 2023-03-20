@@ -3,8 +3,7 @@ import Header from "../../components/header";
 function Home() {
   return (
     <>
-      <Header />
-      <div style={{ backgroundColor: "black", height: "200vh" }}></div>
+      <div style={{ backgroundColor: "whitesmoke", height: "200vh" }}></div>
     </>
   );
 }
