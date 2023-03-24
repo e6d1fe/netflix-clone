@@ -4,6 +4,7 @@ import { getMovies, IGetMoviesResult } from "./api/api";
 import { makeImagePath } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -30,6 +31,7 @@ const Banner = styled.div<{ bgPhoto: string }>`
 const Title = styled.h2`
   font-size: 58px;
   margin-bottom: 10px;
+  font-weight: 600;
 `;
 
 const Overview = styled.p`
@@ -39,6 +41,7 @@ const Overview = styled.p`
 
 const Slider = styled.div`
   position: relative;
+  top: -150px;
 `;
 
 const Row = styled(motion.div)`
@@ -49,20 +52,23 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
+const RowWithNoSSR = dynamic<{ props: type }>;
+
 const Box = styled(motion.div)`
-  background-color: white;
+  background-color: red;
   height: 200px;
+  font-size: 64px;
 `;
 
 const rowVariants = {
   hidden: {
-    x: 1000,
+    x: window.outerWidth + 10,
   },
   visible: {
     x: 0,
   },
   exit: {
-    x: -1000,
+    x: -window.outerWidth - 10,
   },
 };
 
@@ -70,7 +76,14 @@ function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getMovies);
   console.log(data, isLoading);
   const [index, setIndex] = useState(0);
-  const increaseIndex = () => setIndex((prev) => prev + 1);
+  const [leaving, setLeaving] = useState(false);
+  const increaseIndex = () => {
+    if (leaving) return;
+    setLeaving(true);
+    setIndex((prev) => prev + 1);
+  };
+  const toggleLeaving = () => setLeaving((prev) => !prev);
+
   return (
     <>
       <Wrapper>
@@ -86,20 +99,18 @@ function Home() {
               <Overview>{data?.results[0].overview}</Overview>
             </Banner>
             <Slider>
-              <AnimatePresence>
+              <AnimatePresence onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
+                  transition={{ type: "tween", duration: 0.5 }}
                   key={index}
                 >
-                  <Box />
-                  <Box />
-                  <Box />
-                  <Box />
-                  <Box />
-                  <Box />
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <Box key={i}>{i}</Box>
+                  ))}
                 </Row>
               </AnimatePresence>
             </Slider>
