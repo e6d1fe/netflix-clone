@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
 import Header from "../../components/header";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -57,8 +58,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 300;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: black;
+    color: ${(props) => props.theme.white.darker};
     line-height: 1.2;
+    background-color: black;
   }
   a {
     text-decoration: none;
@@ -66,14 +68,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const client = new QueryClient();
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <GlobalStyle />
+    <QueryClientProvider client={client}>
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Header />
         <Component {...pageProps} />
       </ThemeProvider>
-    </>
+    </QueryClientProvider>
   );
 }
