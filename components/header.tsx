@@ -132,7 +132,6 @@ function Header() {
       } else {
         navAnimation.start("top");
       }
-      //   console.log(scrollY.get());
     });
   });
 
