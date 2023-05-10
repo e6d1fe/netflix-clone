@@ -1,5 +1,9 @@
+import { useRouter } from "next/router";
+
 function Search() {
-  return null;
+  const location = useRouter();
+  const keyword = location.query.keyword;
+  console.log(keyword);
 }
 
 export default Search;

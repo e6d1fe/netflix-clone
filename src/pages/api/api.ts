@@ -1,5 +1,5 @@
-const API_KEY = "384439b8a86126fb96cd4c610e7ba8cb";
-const BASE_PATH = "https://api.themoviedb.org/3";
+export const API_KEY = "384439b8a86126fb96cd4c610e7ba8cb";
+export const BASE_PATH = "https://api.themoviedb.org/3";
 
 export interface IMovie {
   backdrop_path: string;

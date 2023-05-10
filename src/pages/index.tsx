@@ -4,6 +4,7 @@ import { getMovies, IGetMoviesResult } from "./api/api";
 import { makeImagePath } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -63,6 +64,7 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   &:last-child {
     transform-origin: center right;
   }
+  cursor: pointer;
 `;
 
 const Info = styled(motion.div)`
@@ -116,10 +118,10 @@ const infoVariants = {
 const offset = 6;
 
 function Home() {
+  const history = useRouter();
   const { data, isLoading } = useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getMovies);
   const [index, setIndex] = useState<number>(0);
   const [leaving, setLeaving] = useState(false);
-  console.log(data);
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
@@ -130,6 +132,9 @@ function Home() {
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
+  const onBoxClicked = (movieId: number) => {
+    history.push(`movies/${movieId}`);
+  };
 
   return (
     <>
@@ -166,6 +171,10 @@ function Home() {
                         whileHover="hover"
                         transition={{ type: "tween" }}
                         bgPhoto={makeImagePath(movie?.backdrop_path, "w500")}
+                        onClick={() => {
+                          onBoxClicked(movie.id);
+                          // onClicked();
+                        }}
                       >
                         <Info variants={infoVariants}>
                           <h4>{movie.title}</h4>
